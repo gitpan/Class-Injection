@@ -5,7 +5,7 @@ use Class::Inspector;
 use strict;
 use Data::Dumper;
 
-our $VERSION = '1.02';
+our $VERSION = '1.03';
 
 our $DEBUG;
 our $info_store={};
@@ -749,18 +749,18 @@ L<Class::Inspector>
 
 =head2 break
 
- $this->break();
+ Class::Injection::break();
 
 sets a flag to break after current method. No further methods used in the method stack.
-You can use that in your new method like:
+You can use that in your new method.
 
- Class::Injection::break;
+ 
 
 
 
 =head2 import
 
- $this->import();
+ Class::Injection::import();
 
 The import function is called by Perl when the class is included by 'use'.
 It takes the parameters after the 'use Class::Injection' call.
@@ -770,22 +770,20 @@ variable. Later you can call install() function to overwrite or append the metho
 
 =head2 info
 
- $this->info();
+ Class::Injection::info();
 
 returning infos about the installed methods as a hash.
 
 
 =head2 install
 
- $this->install();
+ Class::Injection::install();
 
 Installs the methods to existing classes. Do not try to call this method in a BEGIN block,
 the needed environment does not exist so far.
 
 
-=head2 test
 
- $this->test();
 
 
 =head1 RETURN TYPES
