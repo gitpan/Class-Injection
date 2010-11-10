@@ -5,12 +5,13 @@ use Class::Inspector;
 use strict;
 use Data::Dumper;
 
-our $VERSION = '1.04';
+our $VERSION = '1.05';
 
 our $DEBUG;
 our $info_store={};
 our $break_flag;
 
+no warnings;
 
 
 
