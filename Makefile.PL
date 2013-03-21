@@ -16,7 +16,6 @@ WriteMakefile1(
           'VERSION_FROM' => 'lib/Class/Injection.pm',
           'PREREQ_PM' => {
                            'strict' => 0,
-                           'Moose' => 0,
                            'Class::Inspector' => 0,
                            'Data::Dumper' => 0,
                          },

@@ -1,8 +1,13 @@
 package Local::Abstract;
 
 
-use Moose; ## for constructor only
+sub new{
+	my $pkg = shift;
+	
+	my $self = bless {}, $pkg;
 
+	return $self;
+}
 
 
 sub test{

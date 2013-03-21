@@ -5,7 +5,7 @@ use Class::Inspector;
 use strict;
 use Data::Dumper;
 
-our $VERSION = '1.08';
+our $VERSION = '1.09';
 
 our $DEBUG;
 our $info_store={};
@@ -212,8 +212,6 @@ sub install{
 #         push @cmd, '*'.$target.'::_INJBAK_'.$method.'=\&'.$target.'::'.$method.';';
 
 
-        push @cmd, ' use feature "switch";';
-
         push @cmd, '*'.$target.'::'.$method.' = sub {';
 
         push @cmd, ' my @ret_org;';
@@ -224,7 +222,7 @@ sub install{
         push @cmd, ' $__PACKAGE__::last_returned_value = [];';
 
 
-        push @cmd, 'given (1) {'; # break block
+        push @cmd, 'do {'; # break block
 
         
         if (!$replace_target->{$target}){ ## if no replace, reimplement original method
@@ -235,7 +233,7 @@ sub install{
 
             push @cmd_zer, ' push @ret_refs, \@ret_org;';
 
-            push @cmd_zer,'break if $Class::Injection::break_flag;';
+            push @cmd_zer,'last if $Class::Injection::break_flag;';
 
         }
         
@@ -264,7 +262,7 @@ sub install{
             $waitcmd .= ' push @ret_last, @ret_tmp;'."\n";
             $waitcmd .= ' push @ret, @ret_tmp;'."\n";
             $waitcmd .= ' push @ret_refs, \@ret_tmp;'."\n"; ## collecting references
-            $waitcmd .= ' break if $Class::Injection::break_flag;'."\n";
+            $waitcmd .= ' last if $Class::Injection::break_flag;'."\n";
             
             ## depending on the priority place it before or after
             if ($priority < 0){
@@ -312,7 +310,7 @@ sub install{
 
         my $retv = $ret_sign.$ret_meth;
 
-        push @cmd, '}'; # break block
+        push @cmd, '} until (1 == 1);'; # break block
         push @cmd,'$Class::Injection::break_flag = 0;'; ## reset the break flag
 
         if ($returnmethod eq 'collect'){
@@ -526,9 +524,6 @@ technologies.
  # Imagine you want to overwrite the test() method.
 
  package Foo::Target;
-
- use Moose; # creates an constructor
-
 
  sub test{
    my $this=shift;
@@ -756,8 +751,6 @@ The methods of the abstract class should already return an arrayref. And in the 
 Class::Injection line. That will overwrite the abstract class's methods.
 
     package Abstract;
-
-    use Moose; ## for constructor only
 
     sub test{
     my $this=shift;
